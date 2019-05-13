@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,13 +23,12 @@ namespace Minecraft.ECS
 
         void Awake()
         {
-
+            // 偏移量，类似 Random Seed
             offsetX = Random.Range(0, 99999);
             offsetY = Random.Range(0, 99999);
 
-//            Minecraft.GameSettings.Heightmap = GenerateHeightMap();
+            GameSettings.Heightmap = GenerateHeightMap();
             SpawnNumberBlocks.Heightmap = GenerateHeightMap();
-
         }
 
         Texture2D GenerateHeightMap()
@@ -43,18 +43,24 @@ namespace Minecraft.ECS
                     heightMap.SetPixel(x, y, color);
                 }
             }
+
             heightMap.Apply();
+
+//            byte[] bytes = heightMap.EncodeToPNG();
+//            File.WriteAllBytes(Application.dataPath + "/heightMap.png", bytes);
 
             return heightMap;
         }
+
         Color CalculateColor(int x, int y)
         {
-            float xCoord1 = (float)x / textureWidth * scale1 + offsetX;
-            float yCoord1 = (float)y / textureHeight * scale1 + offsetY;
-            float xCoord2 = (float)x / textureWidth * scale2 + offsetX;
-            float yCoord2 = (float)y / textureHeight * scale2 + offsetY;
-            float xCoord3 = (float)x / textureWidth * scale3 + offsetX;
-            float yCoord3 = (float)y / textureHeight * scale3 + offsetY;
+            // 梯度效果
+            float xCoord1 = (float) x / textureWidth * scale1 + offsetX;
+            float yCoord1 = (float) y / textureHeight * scale1 + offsetY;
+            float xCoord2 = (float) x / textureWidth * scale2 + offsetX;
+            float yCoord2 = (float) y / textureHeight * scale2 + offsetY;
+            float xCoord3 = (float) x / textureWidth * scale3 + offsetX;
+            float yCoord3 = (float) y / textureHeight * scale3 + offsetY;
 
             float sample1 = Mathf.PerlinNoise(xCoord1, yCoord1) / 15;
             float sample2 = Mathf.PerlinNoise(xCoord2, yCoord2) / 15;

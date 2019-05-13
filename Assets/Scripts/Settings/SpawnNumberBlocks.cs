@@ -14,6 +14,7 @@ namespace Minecraft
         public static EntityArchetype BlockArchetype;
 
         [Header("World = ChunkBase x ChunkBase")]
+        // 区块（Chunk）是 Minecraft 世界里一个大小为16×256×16的部分。
         public int ChunkBase = 1;
 
         [Header("Mesh Info")] public Mesh blockMesh;
@@ -48,6 +49,9 @@ namespace Minecraft
 
         void ChunkGenerator(int amount)
         {
+            // 每个 chunks 1500 个方块， y 方向 15 个，x 方向 10 个，z 方向 10 个
+            // ChunkBase 有 10 个，因此一共有 10 * 10 个 chunks
+            // 一共是 10 * 10 * 1500 个方块
             int totalamount = (amount * amount) * 1500;
             //int ordernumber = 0;
             int hightlevel;
@@ -88,6 +92,7 @@ namespace Minecraft
                                 maTemp = no6Mat;
                                 break;
                             default:
+                                // 0 - 6 以外的都是空气
                                 maTemp = noQMat;
                                 airChecker = true;
                                 break;
